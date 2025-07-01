@@ -1,0 +1,16 @@
+host: http://thomas.terred.kdrezo.net
+user: thomas
+diretory: /home/thomas/www
+
+pour le 12:
+- un bouton nouvel utilisateur sur la liste des utilisateurs. 
+- un formulaire de saisi pour ajouter un nouvel utilisateur. 
+       1. une version avec la description de tout les champs html non generer.
+       2. une version ou on genere le html a partir du tableau $headers du fichier users.php totu les input seront de type text
+- ecrire la fonction getAge2 avec time(), strtotime(), date().
+
+phpunit 
+
+
+Faire une page qui affiche la liste des utilisateurs du fichier users.csv saisir 
+l'adresse mail de l'un d'entre eux dans le but de l'effacer du fichier en question.
