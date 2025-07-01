@@ -1,7 +1,9 @@
 <?php
 include 'init.php';
 include 'html-header.php';
-
+/*
+ * cette application permet de modifier les utilisateurs dans un fichier CSV
+ */
 $csvFile = "users.csv";
 $emailCible = $_GET['email'] ?? '';
 $utilisateur = null;
