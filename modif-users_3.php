@@ -4,23 +4,19 @@ include 'html-header.php';
 
 $csvFile = "users.csv";
 $emailCible = $_GET['email'] ?? '';
-$mode = $emailCible ? "modif" : "creat";
 $utilisateur = null;
 
 // Charger l'utilisateur
-if ($mode == 'modif') {
-    if (($handle = fopen($csvFile, "r")) !== FALSE) {
-        while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-            if (trim($data[0]) === $emailCible) {
-                $utilisateur = $data;
-                break;
-            }
+if (($handle = fopen($csvFile, "r")) !== FALSE) {
+    while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+        if (trim($data[0]) === $emailCible) {
+            $utilisateur = $data;
+            break;
         }
-        fclose($handle);
     }
-} else {
-    $utilisateur = ['','','','','','','','','','',''];
+    fclose($handle);
 }
+
 // Traitement des formulaires
 if (isPost()) {
     if (isset($_POST['modifier'])) {
@@ -34,6 +30,7 @@ if (isPost()) {
                         $emailCible,
                         $_POST['prenom'] ?? '',
                         $_POST['nom'] ?? '',
+                        $_POST['motdepasse'] ?? '',
                         $_POST['naissance'] ?? ''
                     ];
                 }
@@ -103,17 +100,18 @@ if (isPost()) {
                 <input type="text" class="form-control" id="nom" name="nom" value="<?= htmlspecialchars($utilisateur[2]) ?>" required>
             </div>
 
+            <div class="mb-3">
+                <label for="motdepasse" class="form-label">Mot de passe</label>
+                <input type="password" class="form-control" id="motdepasse" name="motdepasse" value="<?= htmlspecialchars($utilisateur[3]) ?>" required>
+            </div>
 
             <div class="mb-3">
                 <label for="naissance" class="form-label">Date de naissance</label>
                 <input type="date" class="form-control" id="naissance" name="naissance" value="<?= htmlspecialchars($utilisateur[4]) ?>" required>
             </div>
-            <?php if ($mode == 'modif') { ?>
-                <button type="submit" name="modifier" class="btn btn-primary">Enregistrer les modifications</button>
-                <button type="submit" name="supprimer" class="btn btn-danger">Supprimer cet utilisateur</button>
-            <?php } else { ?>
-                <button type="submit" name="creation" class="btn btn-success">Créer cet utilisateur</button>
-            <?php } ?>
+
+            <button type="submit" name="modifier" class="btn btn-primary">Enregistrer les modifications</button>
+            <button type="submit" name="supprimer" class="btn btn-danger">Supprimer cet utilisateur</button>
         </form>
 
     <?php else: ?>
