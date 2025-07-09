@@ -47,7 +47,7 @@ function connectDb() {
         $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
         // Pour afficher les erreurs PDO
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        echo "Connexion réussie";
+       // echo "Connexion réussie";
         return $conn;
     } catch (PDOException $e) {
         die("Erreur de connexion : " . $e->getMessage());

@@ -1,46 +1,40 @@
 <?php
 include 'html-header.php';
+include 'init.php';
 
-$csvFile = "users.csv";
 $message = "";
 $email = $_GET['email'] ?? '';
 
 if (!$email) {
-    $message = "Aucun utilisateur sélectionné.";
+    $message = "<div class='alert alert-danger'>Aucun utilisateur sélectionné.</div>";
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ancien = $_POST['ancien'] ?? '';
     $nouveau = $_POST['nouveau'] ?? '';
-    $trouve = false;
-    $users = [];
 
-    // Lecture du CSV et recherche de l'utilisateur
-    if (($handle = fopen($csvFile, "r")) !== FALSE) {
-        while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-            if (trim($data[0]) === $email) {
-                $trouve = true;
-                // Vérifie l'ancien mot de passe
-                if (password_verify($ancien, $data[3])) {
-                    // Hache le nouveau mot de passe
-                    $data[3] = password_hash($nouveau, PASSWORD_DEFAULT);
-                    $message = "<div class='alert alert-success'>Mot de passe changé avec succès.</div>";
-                } else {
-                    $message = "<div class='alert alert-danger'>Ancien mot de passe incorrect.</div>";
-                }
-            }
-            $users[] = $data;
-        }
-        fclose($handle);
-    }
+    $conn = connectDb();
 
-    // Réécriture du CSV si modification
-    if ($trouve && strpos($message, 'succès') !== false) {
-        if (($handle = fopen($csvFile, "w")) !== FALSE) {
-            foreach ($users as $user) {
-                fputcsv($handle, $user, ";");
-            }
-            fclose($handle);
+    // Recherche de l'utilisateur par email
+    $sql = "SELECT * FROM users WHERE email = :email";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute(['email' => $email]);
+    $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($utilisateur) {
+        // Vérification de l'ancien mot de passe
+        if (password_verify($ancien, $utilisateur['mot_de_passe'])) {
+            // Mise à jour du nouveau mot de passe haché
+            $nouveauHash = password_hash($nouveau, PASSWORD_DEFAULT);
+            $sqlUpdate = "UPDATE users SET mot_de_passe = :mot_de_passe WHERE email = :email";
+            $stmtUpdate = $conn->prepare($sqlUpdate);
+            $stmtUpdate->execute([
+                'mot_de_passe' => $nouveauHash,
+                'email' => $email
+            ]);
+            $message = "<div class='alert alert-success'>Mot de passe changé avec succès.</div>";
+        } else {
+            $message = "<div class='alert alert-danger'>Ancien mot de passe incorrect.</div>";
         }
-    } elseif (!$trouve) {
+    } else {
         $message = "<div class='alert alert-danger'>Utilisateur non trouvé.</div>";
     }
 }

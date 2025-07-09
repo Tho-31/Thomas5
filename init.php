@@ -1,5 +1,5 @@
 <?php
 
+include 'function.php';
 session_start();
 
-include 'function.php';
