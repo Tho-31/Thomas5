@@ -44,14 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<li class='list-group-item d-flex justify-content-between align-items-center'>";
             echo "<span>$email</span>";
             echo "<div class='btn-group'>";
-
-            // Bouton Modifier
             echo "<a href='modif-users.php?email=" . urlencode($email) . "' class='btn btn-primary btn-sm'>Modifier</a>";
 
-            // Bouton Gérer mot de passe
-            echo "<a href='changer_motdepasse.php?email=" . urlencode($email) . "' class='btn btn-warning btn-sm' style='margin-left:5px;'>Gérer mot de passe</a>";
-
-            // Bouton Supprimer
             echo "<form method='post' style='display:inline-block; margin-left:5px;'>";
             echo "<input type='hidden' name='email' value='" . htmlspecialchars($email) . "'>";
             echo "<button type='submit' class='btn btn-danger btn-sm' onclick='return confirm(\"Supprimer cet utilisateur ?\");'>Supprimer</button>";

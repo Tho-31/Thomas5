@@ -6,22 +6,18 @@ include 'init.php';
  */
 // interieur de isPost doit faire 4 lignes
 if (isPost()) {
-    // Récupération sécurisée des champs
-    $email = $_POST['email'] ?? '';
+    var_dump($_POST);
+    
+/*    $email = $_POST['email'] ?? '';
     $prenom = $_POST['prenom'] ?? '';
     $nom = $_POST['nom'] ?? '';
     $motdepasse = $_POST['motdepasse'] ?? '';
-    $naissance = $_POST['naissance'] ?? '';
-
-    // Hachage du mot de passe
-    $hash = password_hash($motdepasse, PASSWORD_DEFAULT);
-
-    // Préparation du tableau à enregistrer
-    $user = [$email, $prenom, $nom, $hash, $naissance];
-
-    // Enregistrement dans le CSV
+    $naissance = $_POST['naissance'] ?? ''; */
+ 
+//  le fputcsv doit tenir en moins de 30 caracteres  
+    
     if (($handle = fopen("users.csv", "a")) !== FALSE) {
-        fputcsv($handle, $user, ";");
+        fputcsv($handle, $_POST, ";");
         fclose($handle);
     }
 }

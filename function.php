@@ -1,6 +1,5 @@
 <?php
 
-
 function isPost() {
     return $_SERVER['REQUEST_METHOD'] === 'POST';
 }
@@ -33,6 +32,26 @@ function getAge($date) {
 
     return $age;
 }
-                            // time()
-                            // date()
-                            // strtotime()
+
+// time()
+// date()
+// strtotime()
+function connectDb() {
+
+    $host = "localhost";
+    $dbname = "thomas";
+    $username = "thomas";
+    $password = "zorro";
+
+    try {
+        $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+        // Pour afficher les erreurs PDO
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        echo "Connexion réussie";
+        return $conn;
+    } catch (PDOException $e) {
+        die("Erreur de connexion : " . $e->getMessage());
+    }
+}
+
+?>
